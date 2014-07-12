@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.RenderingHints;
 import java.awt.Font;
+import java.awt.Point;
 
 class WorkingPanel extends JPanel{
 	/*
@@ -16,7 +17,7 @@ class WorkingPanel extends JPanel{
 	
 	private CrossWord cw;
 	private Dimension size;
-	private int[] cursorposition = {0, 0};
+	private Point cursorposition = new Point(0, 0);;
 	
 	WorkingPanel(int w, int h){
 		cw = new CrossWord(w, h);
@@ -52,7 +53,7 @@ class WorkingPanel extends JPanel{
 		for(i = 0; i < size.width; i++){
 			for(j = 0; j < size.height; j++){
 				//Somewhere here must be the bold lines drawing. Maybe...
-				if( (i == cursorposition[0]) && (j == cursorposition[1]) ){
+				if( (i == cursorposition.x) && (j == cursorposition.y) ){
 					painter.setColor(Color.RED);
 				}
 				painter.drawString(cw.getLetter(i,j), i * 20 + 4, j * 20 + 16);
@@ -74,30 +75,29 @@ class WorkingPanel extends JPanel{
 		doDrawing(g);
 	}
 	
-	public int[] getCursorPos(){
+	public Point getCursorPos(){
 		return cursorposition;
 	}
 	
 	public void setCursorPos(int x, int y){
-		cursorposition[0] = x;
-		cursorposition[1] = y;
-		if(cursorposition[0] >= size.width){
-			cursorposition[0] = size.width;
+		cursorposition.setLocation(x, y);
+		if(cursorposition.x >= size.width){
+			cursorposition.x = size.width;
 		}
-		if(cursorposition[0] < 0){
-			cursorposition[0] = 0;
+		if(cursorposition.x < 0){
+			cursorposition.x = 0;
 		}
-		if(cursorposition[1] >= size.height){
-			cursorposition[1] = size.height;
+		if(cursorposition.y >= size.height){
+			cursorposition.y = size.height;
 		}
-		if(cursorposition[1] < 0){
-			cursorposition[1] = 0;
+		if(cursorposition.y < 0){
+			cursorposition.y = 0;
 		}
 		repaint();
 	}
 	
 	public void setLetter(char c){
-		cw.setLetter(c, cursorposition[0], cursorposition[1]);
+		cw.setLetter(c, cursorposition.x, cursorposition.y);
 		repaint();
 	}
 
