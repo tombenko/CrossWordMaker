@@ -1,4 +1,4 @@
-
+import javax.swing.SwingUtilities;
 
 public class CrossWordMaker{
 	/*
@@ -6,7 +6,13 @@ public class CrossWordMaker{
 	 * */
 	
 	public static void main(String args[]){
-		new WorkingWindow();
+		SwingUtilities.invokeLater(
+			new Runnable(){
+				public void run(){
+					new WorkingWindow().setVisible(true);
+				}
+			}
+		);
 	}
 
 }
