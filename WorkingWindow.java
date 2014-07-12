@@ -33,25 +33,24 @@ class WorkingWindow extends JFrame{
 		add(wp);
 		pack();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
 		addKeyListener(
 			new KeyListener(){
 				public void keyPressed(KeyEvent e){
 					switch(e.getKeyCode()){
 						case KeyEvent.VK_LEFT:{
-							wp.setCursorPos(--wp.getCursorPos()[0],wp.getCursorPos()[1]);
+							wp.setCursorPos(--wp.getCursorPos().x,wp.getCursorPos().y);
 							break;
 						}
 						case KeyEvent.VK_RIGHT:{
-							wp.setCursorPos(++wp.getCursorPos()[0],wp.getCursorPos()[1]);
+							wp.setCursorPos(++wp.getCursorPos().x,wp.getCursorPos().y);
 							break;
 						}
 						case KeyEvent.VK_UP:{
-							wp.setCursorPos(wp.getCursorPos()[0],--wp.getCursorPos()[1]);
+							wp.setCursorPos(wp.getCursorPos().x,--wp.getCursorPos().y);
 							break;
 						}
 						case KeyEvent.VK_DOWN:{
-							wp.setCursorPos(wp.getCursorPos()[0],++wp.getCursorPos()[1]);
+							wp.setCursorPos(wp.getCursorPos().x,++wp.getCursorPos().y);
 							break;
 						}
 						default:{
