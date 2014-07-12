@@ -3,6 +3,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import java.awt.GridLayout;
 
 class WorkingWindow extends JFrame{
@@ -65,6 +67,33 @@ class WorkingWindow extends JFrame{
 				}
 				
 				public void keyTyped(KeyEvent e){
+					
+				}
+			}
+		);
+		addMouseListener(
+			new MouseListener(){
+				public void mouseEntered(MouseEvent e){
+					
+				}
+				
+				public void mouseExited(MouseEvent e){
+					
+				}
+				
+				public void mouseReleased(MouseEvent e){
+					
+				}
+				
+				public void mousePressed(MouseEvent e){
+					
+				}
+				
+				public void mouseClicked(MouseEvent e){
+					
+					if(e.getButton() == MouseEvent.BUTTON1){
+						wp.setCursorPos(e.getX() / 20, e.getY() / 20 - 1);
+					}
 					
 				}
 			}
