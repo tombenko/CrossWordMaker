@@ -22,16 +22,15 @@ class WorkingWindow extends JFrame{
 	
 	//Constructors
 	
-	WorkingWindow(){
-		initUI();
+	WorkingWindow(String title){
+		initUI(title);
 	}
 	
 	//Methods
 	
-	private void initUI(){
-		setTitle("CrossWordMaker");
+	private void initUI(String title){
+		setTitle(title);
 		add(wp);
-		pack();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addKeyListener(
 			new KeyListener(){
@@ -97,6 +96,7 @@ class WorkingWindow extends JFrame{
 				}
 			}
 		);
+		pack();
 		
 	}
 
