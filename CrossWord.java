@@ -1,4 +1,4 @@
-
+import java.lang.reflect.Array;
 
 class CrossWord{
 	/*
@@ -8,21 +8,18 @@ class CrossWord{
 	
 	//Fields
 	
-	private int Row, Column;
-	private Square[][] CrossWordNet;
+	private Square[][] crossWordNet;
 	
 	//Constructors
 	
 	CrossWord(int row, int column){
 		
-		CrossWordNet = new Square[row][column];
-		Row = row;
-		Column = column;
+		crossWordNet = new Square[row][column];
 		
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < column; j++){
+		for(int i = 0; i < Array.getLength(crossWordNet); i++){
+			for(int j = 0; j < Array.getLength(crossWordNet[i]); j++){
 				// In the beginning are there nothing.
-				CrossWordNet[i][j] = new Square(' ');
+				crossWordNet[i][j] = new Square(' ');
 			}
 		}
 		
@@ -30,39 +27,39 @@ class CrossWord{
 	
 	//Methods
 	
-	void setLetter(char letter, int row, int column){
+	public void setLetter(char letter, int row, int column){
 		
-		CrossWordNet[row][column].setLetter(letter);
-		
-	}
-	
-	String getLetter(int row, int column){
-		return String.valueOf(CrossWordNet[row][column].getLetter());
+		crossWordNet[row][column].setLetter(letter);
 		
 	}
 	
-	void setNumber(int number, int row, int column){
+	public String getLetter(int row, int column){
+		return String.valueOf(crossWordNet[row][column].getLetter());
 		
-		CrossWordNet[row][column].setNumber(number);
+	}
+	
+	public void setNumber(int number, int row, int column){
+		
+		crossWordNet[row][column].setNumber(number);
 		return;
 		
 	}
 	
-	int getNumber(int row, int column){
-		return CrossWordNet[row][column].getNumber();
+	public int getNumber(int row, int column){
+		return crossWordNet[row][column].getNumber();
 		
 		
 	}
 	
-	void setSideLine(byte which, int row, int column){
+	public void toggleSideLine(byte which, int row, int column){
 		
-		CrossWordNet[row][column].setSideLine(which);
+		crossWordNet[row][column].toggleSideLine(which);
 		return;
 		
 	}
 	
-	byte getSideLine(int row, int column){
-		return CrossWordNet[row][column].getSideLine();
+	public byte getSideLine(int row, int column){
+		return crossWordNet[row][column].getSideLine();
 		
 	}
 
