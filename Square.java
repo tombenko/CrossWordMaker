@@ -13,9 +13,9 @@ class Square{
 	
 	//Fields
 	
-	private char Letter;
-	private int Number;
-	private byte SideLine;	//The first 4 bits signs which line is drawn.
+	private char letter;
+	private int number;
+	private byte sideLine;	//The first 4 bits signs which line is drawn.
 							//1 - left, 2 - right, 4 - top, 8 - bottom
 	
 	//Constructors
@@ -26,23 +26,23 @@ class Square{
 		 * emptiness.
 		 * */
 		
-		Letter = ' ';
-		Number = 0;
-		SideLine = 0;
+		letter = ' ';
+		number = 0;
+		sideLine = 0;
 		
 	}
 	
 	Square(char letter){
 		
-		Letter = letter;
-		Number = 0;
-		SideLine = 0;
+		this.letter = letter;
+		this.number = 0;
+		this.sideLine = 0;
 		
 	}
 	
 	//Methods
 	
-	void setLetter(char letter){
+	public void setLetter(char letter){
 		/*
 		 * Sets the letter written into the square. Capital letters are
 		 * more readable, so all the letters changed to this shape.
@@ -52,55 +52,55 @@ class Square{
 		 * space as letter to have empty squares.)
 		 * */
 		
-		Letter = Character.toUpperCase(letter);
+		this.letter = Character.toUpperCase(letter);
 		
 	}
 	
-	char getLetter(){
+	public char getLetter(){
 		/*
 		 * Returns the letter written into.
 		 * */
 		
-		return Letter;
+		return letter;
 		
 	}
 	
-	void setNumber(int number){
+	public void setNumber(int number){
 		/*
 		 * Sets the number of the square.
 		 * */
 		
-		Number = number;
+		this.number = number;
 		
 	}
 	
-	int getNumber(){
+	public int getNumber(){
 		/*
 		 * Returns the sqares number.
 		 * */
 		
-		return Number;
+		return number;
 		
 	}
 	
-	void setSideLine(byte which){
+	public void toggleSideLine(byte which){
 		/*
 		 * Here we set the border line. The 'which' parameter has the
 		 * same description, as the SideLine variable. The set and unset
 		 * goes the same way, therefore it is enough to made with XOR.
 		 * */
 		
-		SideLine ^= which;
+		this.sideLine ^= which;
 		
 	}
 	
-	byte getSideLine(){
+	public byte getSideLine(){
 		
 		/*
 		 * Returns the border lines.
 		 * */
 		
-		return SideLine;
+		return sideLine;
 		
 	}
 
