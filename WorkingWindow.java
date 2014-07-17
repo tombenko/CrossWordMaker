@@ -95,22 +95,24 @@ class WorkingWindow extends JFrame{
 				}
 				
 				public void mousePressed(MouseEvent e){
-					
+					 
 				}
 				
 				public void mouseClicked(MouseEvent e){
 					
 					if(e.getButton() == MouseEvent.BUTTON1){
-						wp.setCursorPos(new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric()));
+						wp.setCursorPos(new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric() - 1));
 					}
-					if(e.getButton() == MouseEvent.BUTTON2){
+					if(e.getButton() == MouseEvent.BUTTON3){
 						if( (e.getX() % wp.getMetric()) > 15){
-							wp.toggleSideLine(Square.RIGHT, new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric()));
+							wp.toggleSideLine(Square.RIGHT, new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric() - 1));
 						}
 						if( (e.getY() % wp.getMetric()) > 15){
-							wp.toggleSideLine(Square.BOTTOM, new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric()));
+							wp.toggleSideLine(Square.BOTTOM, new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric() - 1));
 						}
-						wp.repaint();
+					}
+					if(e.getButton() == MouseEvent.BUTTON2){
+						//Still is there no function for this button. Maybe later...
 					}
 					
 				}
