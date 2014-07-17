@@ -9,7 +9,7 @@ public class CrossWordMaker{
 		SwingUtilities.invokeLater(
 			new Runnable(){
 				public void run(){
-					new WorkingWindow().setVisible(true);
+					new WorkingWindow("CrossWordMaker").setVisible(true);
 				}
 			}
 		);
