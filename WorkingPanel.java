@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.RenderingHints;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.BasicStroke;
 
 class WorkingPanel extends JPanel{
 	/**
@@ -26,11 +27,15 @@ class WorkingPanel extends JPanel{
 	//This enum is defining the cursor's moving orientation.
 	private enum Orientation {HORIZONTAL, VERTICAL};
 	private Orientation orientation = Orientation.HORIZONTAL;
+	//For the linethickness...
+	BasicStroke thick;
+	BasicStroke thin;
 	
 	WorkingPanel(int w, int h){
 		cw = new CrossWord(w, h);
 		size = new Dimension(w, h);
 		setPreferredSize(new Dimension(size.width * metric, size.height * metric));
+		setStroke(metric);
 	}
 	
 	WorkingPanel(CrossWord workInstance){
@@ -43,6 +48,15 @@ class WorkingPanel extends JPanel{
 		cw = workInstance;
 		size = workInstance.getSize();
 		setPreferredSize(new Dimension(size.width * metric, size.height * metric));
+		setStroke(metric);
+	}
+	
+	WorkingPanel(Dimension size, int metric){
+		cw = new CrossWord(size);
+		this.metric = metric;
+		this.size = size;
+		setPreferredSize(new Dimension(size.width * metric, size.height * metric));
+		setStroke(metric);
 	}
 	
 	//Some more Constructors will be written for changing the metrics.
@@ -67,6 +81,11 @@ class WorkingPanel extends JPanel{
 		//Let's paint the puzzle. This is done by some private methods
 		//for every square. Maybe it would be better to take into a very
 		//new class...
+		
+		//First we draw the borders.
+		
+		painter.drawLine(0, 0, size.width * metric, 0);
+		painter.drawLine(0, 0, 0, size.height * metric);
 		
 		for(int i = 0; i < size.width; i++){
 			for(int j = 0; j < size.height; j++){
@@ -117,21 +136,27 @@ class WorkingPanel extends JPanel{
 		 * Here we draw the borders as a gray rectangle. The bold lines
 		 * around the square will be drawn here too. 
 		 * */
-		g.setColor(Color.GRAY);
-		g.drawRect(position.x * metric, position.y * metric, metric, metric);
 		
 		//Let's inspect if there are given bold lines!
 		
-		g.setColor(Color.BLACK);
-		
-		if(cw.getSideLine(position)[Square.RIGHT]){
+		if(cw.getSideLine(position)[Square.RIGHT] && (cursorPosition.x < size.width)){
+			g.setColor(Color.BLACK);
+			g.setStroke(thick);
 			g.drawLine( (position.x + 1) * metric, position.y * metric, (position.x + 1) * metric, (position.y + 1) * metric);
-			g.drawLine( (position.x + 1) * metric - 1, position.y * metric, (position.x + 1) * metric - 1, (position.y + 1) * metric);
+		} else {
+			g.setColor(Color.LIGHT_GRAY);
+			g.setStroke(thin);
+			g.drawLine( (position.x + 1) * metric, position.y * metric, (position.x + 1) * metric, (position.y + 1) * metric);
 		}
 		
 		if(cw.getSideLine(position.x, position.y)[Square.BOTTOM]){
+			g.setColor(Color.BLACK);
+			g.setStroke(thick);
 			g.drawLine(position.x * metric, (position.y + 1) * metric, (position.x + 1) * metric, (position.y + 1) * metric);
-			g.drawLine(position.x * metric, (position.y + 1) * metric - 1, (position.x + 1) * metric, (position.y + 1) * metric - 1);
+		} else {
+			g.setColor(Color.LIGHT_GRAY);
+			g.setStroke(thin);
+			g.drawLine(position.x * metric, (position.y + 1) * metric, (position.x + 1) * metric, (position.y + 1) * metric);
 		}
 	}
 	
@@ -183,6 +208,11 @@ class WorkingPanel extends JPanel{
 		 * more than one different class.
 		 * */
 		return metric;
+	}
+	
+	private void setStroke(int metric){
+		thick = new BasicStroke(metric / 10 + 1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		thin = new BasicStroke(metric / 40 + 1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 	}
 
 }
