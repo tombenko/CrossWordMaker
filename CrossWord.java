@@ -12,13 +12,16 @@ class CrossWord{
 	 * **/
 	
 	private Square[][] crossWordNet;
+	private Dimension size;
 	
-	CrossWord(int row, int column){
+	public CrossWord(int row, int column){
 		crossWordNet = new Square[row][column];
 		initCrossWord();
+		this.size = new Dimension(row, column);
 	}
 	
-	CrossWord(Dimension size){
+	public CrossWord(Dimension size){
+		this.size = size;
 		crossWordNet = new Square[size.width][size.height];
 		initCrossWord();
 	}
@@ -60,7 +63,11 @@ class CrossWord{
 	}
 	
 	public void toggleSideLine(short which, Point where){
-		crossWordNet[where.x][where.y].toggleSideLine(which);
+		if( ((where.x == size.width - 1) && (which == Square.RIGHT)) || ((where.y == size.height - 1) && (which == Square.BOTTOM)) ){
+			return;
+		} else{
+			crossWordNet[where.x][where.y].toggleSideLine(which);
+		}
 	}
 	
 	public boolean[] getSideLine(int row, int column){
@@ -72,12 +79,12 @@ class CrossWord{
 	}
 	
 	public Dimension getSize(){
-		return new Dimension(Array.getLength(crossWordNet), Array.getLength(crossWordNet[0]));
+		return size;
 	}
 	
 	private void initCrossWord(){
-		for(int i = 0; i < Array.getLength(crossWordNet); i++){
-			for(int j = 0; j < Array.getLength(crossWordNet[i]); j++){
+		for(int i = 0; i < crossWordNet.length; i++){
+			for(int j = 0; j < crossWordNet[i].length; j++){
 				// In the beginning are there nothing.
 				crossWordNet[i][j] = new Square(' ');
 			}
