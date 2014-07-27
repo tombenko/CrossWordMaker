@@ -14,6 +14,10 @@ class WorkingPanel extends JPanel{
 	 * hardcoded, I want first to have the editing works. Parts of the
 	 * class are from zetcode.com (or .org, I always forget it...) in
 	 * hope they don't mind.
+	 * 
+	 * This class now responsible for a bit too much. NOw I'm planning
+	 * to break it into two class - one for editing and one for drawing
+	 * the puzzle.
 	 * **/
 	
 	private CrossWord cw;
@@ -139,7 +143,7 @@ class WorkingPanel extends JPanel{
 		
 		//Let's inspect if there are given bold lines!
 		
-		if(cw.getSideLine(position)[Square.RIGHT] && (cursorPosition.x < size.width)){
+		if(cw.getSideLine(position)[Square.RIGHT]){
 			g.setColor(Color.BLACK);
 			g.setStroke(thick);
 			g.drawLine( (position.x + 1) * metric, position.y * metric, (position.x + 1) * metric, (position.y + 1) * metric);
@@ -198,6 +202,9 @@ class WorkingPanel extends JPanel{
 	}
 	
 	public void toggleSideLine(short which, Point where){
+		if( (where.x >= size.width) || (where.y >= size.height) ){
+			return;
+		}
 		cw.toggleSideLine(which, where);
 		repaint();
 	}
