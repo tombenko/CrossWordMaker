@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.Dimension;
 
 class WorkingWindow extends JFrame{
 	/**
@@ -17,109 +18,30 @@ class WorkingWindow extends JFrame{
 	 * most important: sizing the cossword.
 	 * **/
 	
-	//Fields
+	private WorkingPanel workArea; //Where we will see what we did.
+	private Editor edit; //Where we do what we would like.
+	private Communicator communicator = new Communicator(); //It is the information chanel.
+	private CrossWord workInstance; //It is the crossword we plan to create.
 	
-	private WorkingPanel wp;
-	
-	//Constructors
-	
-	WorkingWindow(String title){
-		wp = new WorkingPanel(new CrossWord(21,13));
+	public WorkingWindow(String title){
 		initUI(title);
 	}
 	
-	//Methods
+	public WorkingWindow(String title, Dimension size){
+		workInstance = new CrossWord(size);
+		edit = new Editor(workInstance, communicator);
+		workArea = new WorkingPanel(workInstance, communicator);
+		new Thread(edit).start();
+		new Thread(workArea).start();
+		initUI(title);
+	}
 	
 	private void initUI(String title){
 		setTitle(title);
-		add(wp);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		addKeyListener(
-			new KeyListener(){
-				public void keyPressed(KeyEvent e){
-					switch(e.getKeyCode()){
-						case KeyEvent.VK_LEFT:{
-							wp.setCursorPos(new Point(--wp.getCursorPos().x,wp.getCursorPos().y));
-							break;
-						}
-						case KeyEvent.VK_RIGHT:{
-							wp.setCursorPos(new Point(++wp.getCursorPos().x,wp.getCursorPos().y));
-							break;
-						}
-						case KeyEvent.VK_UP:{
-							wp.setCursorPos(new Point(wp.getCursorPos().x,--wp.getCursorPos().y));
-							break;
-						}
-						case KeyEvent.VK_DOWN:{
-							wp.setCursorPos(new Point(wp.getCursorPos().x,++wp.getCursorPos().y));
-							break;
-						}
-						case KeyEvent.VK_DELETE: {
-							wp.setLetter(' ');
-							break;
-						}
-						case KeyEvent.VK_SPACE: {
-							wp.toggleOrientation();
-							break;
-						}
-						default:{
-							wp.setLetter(e.getKeyChar());
-							wp.stepCursor();
-							break;
-						}
-					}
-					
-				}
-				
-				public void keyReleased(KeyEvent e){
-					
-				}
-				
-				public void keyTyped(KeyEvent e){
-					
-				}
-			}
-		);
-		addMouseListener(
-			new MouseListener(){
-				public void mouseEntered(MouseEvent e){
-					
-				}
-				
-				public void mouseExited(MouseEvent e){
-					
-				}
-				
-				public void mouseReleased(MouseEvent e){
-					
-				}
-				
-				public void mousePressed(MouseEvent e){
-					 
-				}
-				
-				public void mouseClicked(MouseEvent e){
-					
-					if(e.getButton() == MouseEvent.BUTTON1){
-						wp.setCursorPos(new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric() - 1));
-					}
-					if(e.getButton() == MouseEvent.BUTTON3){
-						if( (e.getX() % wp.getMetric()) > 15){
-							wp.toggleSideLine(Square.RIGHT, new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric() - 1));
-						}
-						if( (e.getY() % wp.getMetric()) > 15){
-							wp.toggleSideLine(Square.BOTTOM, new Point(e.getX() / wp.getMetric(), e.getY() / wp.getMetric() - 1));
-						}
-					}
-					if(e.getButton() == MouseEvent.BUTTON2){
-						//Still is there no function for this button. Maybe later...
-					}
-					
-				}
-			}
-		);
+		add(workArea);
 		pack();
-		
+		setResizable(false);
 	}
 
 }

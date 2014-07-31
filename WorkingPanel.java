@@ -1,69 +1,48 @@
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.RenderingHints;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.BasicStroke;
+import java.awt.Dimension;
 
-class WorkingPanel extends JPanel{
+class WorkingPanel extends JPanel implements Runnable{
 	/**
 	 * In this class do we draw the crossword. The metrics still
 	 * hardcoded, I want first to have the editing works. Parts of the
 	 * class are from zetcode.com (or .org, I always forget it...) in
 	 * hope they don't mind.
 	 * 
-	 * This class now responsible for a bit too much. NOw I'm planning
-	 * to break it into two class - one for editing and one for drawing
-	 * the puzzle.
+	 * The class runs as a thread, communicating with the editor. Here
+	 * we only draw the net. I found it too oversized and responsible
+	 * for too much to let it do the editing too.
+	 * 
+	 * This way the class is thiner and more reliable in hopes.
 	 * **/
 	
+	//This is the instance we try to draw.
 	private CrossWord cw;
-	private Dimension size;
-	//The cursor starts in the upper left corner.
-	private Point cursorPosition = new Point(0, 0);
 	//How big is a square. The font metrics is defined through this va-
 	//riable. The default value is 20 because I found it readable but
 	//not too big.
 	private int metric = 20;
-	//This enum is defining the cursor's moving orientation.
-	private enum Orientation {HORIZONTAL, VERTICAL};
-	private Orientation orientation = Orientation.HORIZONTAL;
-	//For the linethickness...
-	BasicStroke thick;
-	BasicStroke thin;
+	private Communicator communicator;
+	private Point activeSquare = new Point(0,0);
 	
-	WorkingPanel(int w, int h){
-		cw = new CrossWord(w, h);
-		size = new Dimension(w, h);
-		setPreferredSize(new Dimension(size.width * metric, size.height * metric));
-		setStroke(metric);
+	public WorkingPanel(CrossWord given, Communicator comm){
+		cw = given;
+		this.communicator = comm;
+		setPreferredSize(new Dimension(given.getSize().width * metric, given.getSize().height * metric));
 	}
 	
-	WorkingPanel(CrossWord workInstance){
-		/**
-		 * This constructor is written for the planned restoring. The
-		 * restored instance of the crossword is given here to the wor-
-		 * king instance. Then, by saving the work this instance is gi-
-		 * ven back.
-		 * */
-		cw = workInstance;
-		size = workInstance.getSize();
-		setPreferredSize(new Dimension(size.width * metric, size.height * metric));
-		setStroke(metric);
-	}
-	
-	WorkingPanel(Dimension size, int metric){
-		cw = new CrossWord(size);
+	public WorkingPanel(CrossWord given, int metric, Communicator comm){
+		cw = given;
 		this.metric = metric;
-		this.size = size;
-		setPreferredSize(new Dimension(size.width * metric, size.height * metric));
-		setStroke(metric);
+		this.communicator = comm;
+		setPreferredSize(new Dimension(given.getSize().width * metric, given.getSize().height * metric));
 	}
-	
-	//Some more Constructors will be written for changing the metrics.
 	
 	private void doDrawing(Graphics g){
 		/**
@@ -80,25 +59,25 @@ class WorkingPanel extends JPanel{
 		
 		painter.setColor(Color.LIGHT_GRAY);
 		painter.setRenderingHints(rh);
-		painter.setFont(new Font("Monospaced", Font.PLAIN, (metric * 4) / 5));
+		painter.setFont(new Font("Monospaced", Font.PLAIN, (metric * 4) / 5)); //it must be 'int'...
 		
 		//Let's paint the puzzle. This is done by some private methods
 		//for every square. Maybe it would be better to take into a very
 		//new class...
 		
-		//First we draw the borders.
+		//First we draw the borders...
 		
-		painter.drawLine(0, 0, size.width * metric, 0);
-		painter.drawLine(0, 0, 0, size.height * metric);
+		painter.drawLine(0, 0, cw.getSize().width * metric, 0);
+		painter.drawLine(0, 0, 0, cw.getSize().height * metric);
 		
-		for(int i = 0; i < size.width; i++){
-			for(int j = 0; j < size.height; j++){
-				Point whichSquare = new Point(i, j);
-				drawBorders(painter, whichSquare);
-				drawLetter(painter, whichSquare, Character.toString(cw.getLetter(whichSquare)));
-				if(cw.getNumber(whichSquare) != 0){
-					drawNumber(painter, whichSquare, cw.getNumber(whichSquare));
-				}
+		//..then the squares one by one.
+		
+		for(int i = 0; i < cw.getSize().width; i++){
+			for(int j = 0; j < cw.getSize().height; j++){
+				Point pos = new Point(i, j);
+				drawSquare(painter, pos);
+				drawLetter(painter, pos, Character.toString(cw.getLetter(pos)));
+				drawNumber(painter, pos, cw.getNumber(pos));
 			}
 		}
 	}
@@ -109,117 +88,42 @@ class WorkingPanel extends JPanel{
 		doDrawing(g);
 	}
 	
-	public Point getCursorPos(){
-		return cursorPosition;
-	}
-	
-	public void setCursorPos(Point where){
-		cursorPosition.setLocation(where);
-		if(cursorPosition.x >= size.width){
-			cursorPosition.x = size.width - 1;
-		}
-		if(cursorPosition.x < 0){
-			cursorPosition.x = 0;
-		}
-		if(cursorPosition.y >= size.height){
-			cursorPosition.y = size.height - 1;
-		}
-		if(cursorPosition.y < 0){
-			cursorPosition.y = 0;
-		}
-		repaint();
-	}
-	
-	public void setLetter(char c){
-		cw.setLetter(c, cursorPosition);
-		repaint();
-	}
-	
-	private void drawBorders(Graphics2D g, Point position){
+	public void run(){
 		/**
-		 * Here we draw the borders as a gray rectangle. The bold lines
-		 * around the square will be drawn here too. 
+		 * Nothing extra. Sometimes we look for information what to
+		 * draw. This is why this class implements the Runnable interfa-
+		 * ce.
 		 * */
-		
-		//Let's inspect if there are given bold lines!
-		
-		if(cw.getSideLine(position)[Square.RIGHT]){
-			g.setColor(Color.BLACK);
-			g.setStroke(thick);
-			g.drawLine( (position.x + 1) * metric, position.y * metric, (position.x + 1) * metric, (position.y + 1) * metric);
-		} else {
-			g.setColor(Color.LIGHT_GRAY);
-			g.setStroke(thin);
-			g.drawLine( (position.x + 1) * metric, position.y * metric, (position.x + 1) * metric, (position.y + 1) * metric);
+		while(true){
+			cw = communicator.getMessage().getCrossWord();
+			activeSquare = communicator.getMessage().getActiveSquare();
+			repaint();
 		}
-		
-		if(cw.getSideLine(position.x, position.y)[Square.BOTTOM]){
-			g.setColor(Color.BLACK);
-			g.setStroke(thick);
-			g.drawLine(position.x * metric, (position.y + 1) * metric, (position.x + 1) * metric, (position.y + 1) * metric);
-		} else {
-			g.setColor(Color.LIGHT_GRAY);
-			g.setStroke(thin);
-			g.drawLine(position.x * metric, (position.y + 1) * metric, (position.x + 1) * metric, (position.y + 1) * metric);
-		}
+	}
+	
+	private void drawSquare(Graphics2D g, Point position){
+		/**
+		 * Here is drawn the borders of the square. The only information
+		 * we need to this is where to draw and if there is bold line.
+		 */
+		g.drawLine((position.x + 1) * metric, position.y * metric, (position.x + 1) * metric, (position.y + 1) * metric);
+		g.drawLine(position.x * metric, (position.y + 1) * metric, (position.x + 1) * metric, (position.y + 1) * metric);
 	}
 	
 	private void drawLetter(Graphics2D g, Point position, String letter){
-		if(position.equals(cursorPosition)){
-			g.setColor(Color.RED);
-		} else {
-			g.setColor(Color.BLACK);
-		}
-		g.drawString(letter, position.x * metric + metric / 5, position.y * metric + (metric * 4) / 5);
-		if(letter.equals(".")){
-			g.fillRect(position.x * metric, position.y * metric, metric, metric);
-		}
+		/**
+		 * Here are the letters drawn. Needed th letter and where to
+		 * draw.
+		 */
+		
 	}
 	
 	private void drawNumber(Graphics2D g, Point position, int number){
-		g.setFont(new Font("Monospaced", Font.PLAIN, 6));
-		g.drawString(Integer.toString(number), position.x * metric + 2, position.y * metric + 6);
-	}
-	
-	public void toggleOrientation(){
-		if(orientation == Orientation.VERTICAL){
-			orientation = Orientation.HORIZONTAL;
-		} else {
-			orientation = Orientation.VERTICAL;
-		}
-	}
-	
-	public CrossWord getCrossWord(){
-		return cw;
-	}
-	
-	public void stepCursor(){
-		if(orientation == Orientation.HORIZONTAL){
-			setCursorPos(new Point(++getCursorPos().x, getCursorPos().y));
-		} else {
-			setCursorPos(new Point(getCursorPos().x, ++getCursorPos().y));
-		}
-	}
-	
-	public void toggleSideLine(short which, Point where){
-		if( (where.x >= size.width) || (where.y >= size.height) ){
-			return;
-		}
-		cw.toggleSideLine(which, where);
-		repaint();
-	}
-	
-	public int getMetric(){
 		/**
-		 * I don't think it is necessary to have the merics stored in
-		 * more than one different class.
-		 * */
-		return metric;
-	}
-	
-	private void setStroke(int metric){
-		thick = new BasicStroke(metric / 10 + 1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		thin = new BasicStroke(metric / 40 + 1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		 * Drawn are the numbers. Drawn to their faces. And it is a
+		 * human number and it is six hundred and sixty six.
+		 */
+		
 	}
 
 }

@@ -1,4 +1,5 @@
 import javax.swing.SwingUtilities;
+import java.awt.Dimension;
 
 public class CrossWordMaker{
 	/*
@@ -9,7 +10,7 @@ public class CrossWordMaker{
 		SwingUtilities.invokeLater(
 			new Runnable(){
 				public void run(){
-					new WorkingWindow("CrossWordMaker").setVisible(true);
+					new WorkingWindow("CrossWordMaker", new Dimension(21,13)).setVisible(true);
 				}
 			}
 		);

@@ -14,52 +14,26 @@ class CrossWord{
 	private Square[][] crossWordNet;
 	private Dimension size;
 	
-	public CrossWord(int row, int column){
-		crossWordNet = new Square[row][column];
-		initCrossWord();
-		this.size = new Dimension(row, column);
-	}
-	
 	public CrossWord(Dimension size){
 		this.size = size;
 		crossWordNet = new Square[size.width][size.height];
 		initCrossWord();
 	}
 	
-	public void setLetter(char letter, int row, int column){
-		crossWordNet[row][column].setLetter(letter);
-	}
-	
 	public void setLetter(char letter, Point where){
 		crossWordNet[where.x][where.y].setLetter(letter);
-	}
-	
-	public char getLetter(int row, int column){
-		return crossWordNet[row][column].getLetter();
 	}
 	
 	public char getLetter(Point where){
 		return crossWordNet[where.x][where.y].getLetter();
 	}
 	
-	public void setNumber(int number, int row, int column){
-		crossWordNet[row][column].setNumber(number);
-	}
-	
 	public void setNumber(int number, Point where){
 		crossWordNet[where.x][where.y].setNumber(number);
 	}
 	
-	public int getNumber(int row, int column){
-		return crossWordNet[row][column].getNumber();
-	}
-	
 	public int getNumber(Point where){
 		return crossWordNet[where.x][where.y].getNumber();
-	}
-	
-	public void toggleSideLine(short which, int row, int column){
-		crossWordNet[row][column].toggleSideLine(which);
 	}
 	
 	public void toggleSideLine(short which, Point where){
@@ -68,10 +42,6 @@ class CrossWord{
 		} else{
 			crossWordNet[where.x][where.y].toggleSideLine(which);
 		}
-	}
-	
-	public boolean[] getSideLine(int row, int column){
-		return crossWordNet[row][column].getSideLine();
 	}
 	
 	public boolean[] getSideLine(Point where){
