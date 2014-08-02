@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
@@ -18,21 +19,17 @@ class WorkingWindow extends JFrame{
 	 * most important: sizing the cossword.
 	 * **/
 	
-	private WorkingPanel workArea; //Where we will see what we did.
-	private Editor edit; //Where we do what we would like.
-	private Communicator communicator = new Communicator(); //It is the information chanel.
-	private CrossWord workInstance; //It is the crossword we plan to create.
+	private WorkingPanel workArea;		//Where we will see what we did.
+	private CrossWord workInstance;		//It is the crossword we plan to create.
 	
 	public WorkingWindow(String title){
+		workInstance = new CrossWord(new Dimension(15, 17));
 		initUI(title);
 	}
 	
 	public WorkingWindow(String title, Dimension size){
 		workInstance = new CrossWord(size);
-		edit = new Editor(workInstance, communicator);
-		workArea = new WorkingPanel(workInstance, communicator);
-		new Thread(edit).start();
-		new Thread(workArea).start();
+		workArea = new WorkingPanel(workInstance);
 		initUI(title);
 	}
 	
