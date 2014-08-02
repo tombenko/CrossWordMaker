@@ -8,7 +8,7 @@ import java.awt.Point;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 
-class WorkingPanel extends JPanel implements Runnable{
+class WorkingPanel extends JPanel{
 	/**
 	 * In this class do we draw the crossword. The metrics still
 	 * hardcoded, I want first to have the editing works. Parts of the
@@ -28,20 +28,30 @@ class WorkingPanel extends JPanel implements Runnable{
 	//riable. The default value is 20 because I found it readable but
 	//not too big.
 	private int metric = 20;
-	private Communicator communicator;
+	private int fontsize;
 	private Point activeSquare = new Point(0,0);
+	private BasicStroke thick;
+	private BasicStroke thin;
+	private Editor editor;
 	
-	public WorkingPanel(CrossWord given, Communicator comm){
+	public WorkingPanel(CrossWord given){
 		cw = given;
-		this.communicator = comm;
-		setPreferredSize(new Dimension(given.getSize().width * metric, given.getSize().height * metric));
+		initPanel();
 	}
 	
-	public WorkingPanel(CrossWord given, int metric, Communicator comm){
+	public WorkingPanel(CrossWord given, int metric){
 		cw = given;
 		this.metric = metric;
-		this.communicator = comm;
-		setPreferredSize(new Dimension(given.getSize().width * metric, given.getSize().height * metric));
+		initPanel();
+	}
+	
+	private void initPanel(){
+		editor = new Editor(cw);
+		setPreferredSize(new Dimension(cw.getSize().width * metric, cw.getSize().height * metric));
+		thick = new BasicStroke(metric / 10 + 1);
+		thin = new BasicStroke(metric / 40 + 1);
+		fontsize = (metric * 4) / 5;
+		addKeyListener(editor);
 	}
 	
 	private void doDrawing(Graphics g){
@@ -50,6 +60,7 @@ class WorkingPanel extends JPanel implements Runnable{
 		 * It isn't necessary to set this method public, because we
 		 * don't call it directly.
 		 * */
+		 System.out.println("rajzolás");
 		
 		Graphics2D painter = (Graphics2D) g;
 		
@@ -59,7 +70,7 @@ class WorkingPanel extends JPanel implements Runnable{
 		
 		painter.setColor(Color.LIGHT_GRAY);
 		painter.setRenderingHints(rh);
-		painter.setFont(new Font("Monospaced", Font.PLAIN, (metric * 4) / 5)); //it must be 'int'...
+		painter.setFont(new Font("Monospaced", Font.PLAIN, fontsize)); //it must be 'int'...
 		
 		//Let's paint the puzzle. This is done by some private methods
 		//for every square. Maybe it would be better to take into a very
@@ -83,22 +94,8 @@ class WorkingPanel extends JPanel implements Runnable{
 	}
 	
 	public void paintComponent(Graphics g){
-		
 		super.paintComponent(g);
 		doDrawing(g);
-	}
-	
-	public void run(){
-		/**
-		 * Nothing extra. Sometimes we look for information what to
-		 * draw. This is why this class implements the Runnable interfa-
-		 * ce.
-		 * */
-		while(true){
-			cw = communicator.getMessage().getCrossWord();
-			activeSquare = communicator.getMessage().getActiveSquare();
-			repaint();
-		}
 	}
 	
 	private void drawSquare(Graphics2D g, Point position){
@@ -106,15 +103,36 @@ class WorkingPanel extends JPanel implements Runnable{
 		 * Here is drawn the borders of the square. The only information
 		 * we need to this is where to draw and if there is bold line.
 		 */
+		if(cw.getSideLine(position)[Square.RIGHT]){
+			g.setStroke(thick);
+			g.setColor(Color.BLACK);
+		} else {
+			g.setStroke(thin);
+			g.setColor(Color.LIGHT_GRAY);
+		}
 		g.drawLine((position.x + 1) * metric, position.y * metric, (position.x + 1) * metric, (position.y + 1) * metric);
+		if(cw.getSideLine(position)[Square.BOTTOM]){
+			g.setStroke(thick);
+			g.setColor(Color.BLACK);
+		} else {
+			g.setStroke(thin);
+			g.setColor(Color.LIGHT_GRAY);
+		}
 		g.drawLine(position.x * metric, (position.y + 1) * metric, (position.x + 1) * metric, (position.y + 1) * metric);
 	}
 	
 	private void drawLetter(Graphics2D g, Point position, String letter){
 		/**
-		 * Here are the letters drawn. Needed th letter and where to
+		 * Here are the letters drawn. Needed the letter and where to
 		 * draw.
 		 */
+		 
+		if(position.equals(activeSquare)){
+			g.setColor(Color.RED);
+		} else {
+			g.setColor(Color.BLACK);
+		}
+		g.drawString(letter, position.x * metric + (metric - fontsize) / 2, (position.y + 1) * metric - (metric - fontsize) /2);
 		
 	}
 	
