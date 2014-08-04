@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
 class WorkingPanel extends JPanel{
 	/**
@@ -14,12 +16,6 @@ class WorkingPanel extends JPanel{
 	 * hardcoded, I want first to have the editing works. Parts of the
 	 * class are from zetcode.com (or .org, I always forget it...) in
 	 * hope they don't mind.
-	 * 
-	 * The class runs as a thread, communicating with the editor. Here
-	 * we only draw the net. I found it too oversized and responsible
-	 * for too much to let it do the editing too.
-	 * 
-	 * This way the class is thiner and more reliable in hopes.
 	 * **/
 	
 	//This is the instance we try to draw.
@@ -32,7 +28,6 @@ class WorkingPanel extends JPanel{
 	private Point activeSquare = new Point(0,0);
 	private BasicStroke thick;
 	private BasicStroke thin;
-	private Editor editor;
 	
 	public WorkingPanel(CrossWord given){
 		cw = given;
@@ -46,12 +41,10 @@ class WorkingPanel extends JPanel{
 	}
 	
 	private void initPanel(){
-		editor = new Editor(cw);
 		setPreferredSize(new Dimension(cw.getSize().width * metric, cw.getSize().height * metric));
 		thick = new BasicStroke(metric / 10 + 1);
 		thin = new BasicStroke(metric / 40 + 1);
 		fontsize = (metric * 4) / 5;
-		addKeyListener(editor);
 	}
 	
 	private void doDrawing(Graphics g){
@@ -60,7 +53,6 @@ class WorkingPanel extends JPanel{
 		 * It isn't necessary to set this method public, because we
 		 * don't call it directly.
 		 * */
-		 System.out.println("rajzolás");
 		
 		Graphics2D painter = (Graphics2D) g;
 		
@@ -127,10 +119,13 @@ class WorkingPanel extends JPanel{
 		 * draw.
 		 */
 		 
-		if(position.equals(activeSquare)){
+		if( (position.x == activeSquare.x) && (position.y == activeSquare.y) ){
 			g.setColor(Color.RED);
 		} else {
 			g.setColor(Color.BLACK);
+		}
+		if( letter.equals(".") ){
+			g.fillRect(position.x * metric, position.y * metric, metric, metric);
 		}
 		g.drawString(letter, position.x * metric + (metric - fontsize) / 2, (position.y + 1) * metric - (metric - fontsize) /2);
 		
@@ -142,6 +137,12 @@ class WorkingPanel extends JPanel{
 		 * human number and it is six hundred and sixty six.
 		 */
 		
+	}
+	
+	public void setDrawing(CrossWord given, Point ap){
+		cw = given;
+		activeSquare.setLocation(ap);
+		this.repaint();
 	}
 
 }
