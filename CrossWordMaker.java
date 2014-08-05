@@ -2,8 +2,10 @@ import javax.swing.SwingUtilities;
 import java.awt.Dimension;
 
 public class CrossWordMaker{
-	/*
-	 * Does nothing just hides the classes.
+	/**
+	 * This is the entrypoint. No special methods declared here for sa-
+	 * fety and security reasons. For beginning we have a standard sized
+	 * puzzle, which will be resized later. At least I'm planning it.
 	 * */
 	
 	public static void main(String args[]){
