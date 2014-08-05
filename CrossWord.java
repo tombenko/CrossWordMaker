@@ -5,10 +5,7 @@ import java.awt.Point;
 class CrossWord{
 	/**
 	 * A crossword puzzle is a matrix of squares in my point of view.
-	 * The essential content is in the squares. Planning to use the
-	 * Point class instead of direct reference to the array's elements.
-	 * Even the size of the net will be given by a Dimension class to
-	 * simplify this class.
+	 * The essential content is in the squares.
 	 * **/
 	
 	private Square[][] crossWordNet;
@@ -55,7 +52,7 @@ class CrossWord{
 	private void initCrossWord(){
 		for(int i = 0; i < crossWordNet.length; i++){
 			for(int j = 0; j < crossWordNet[i].length; j++){
-				// In the beginning are there nothing.
+				// In the beginning was there nothing.
 				crossWordNet[i][j] = new Square(' ');
 			}
 		}
