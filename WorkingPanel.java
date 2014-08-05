@@ -12,10 +12,10 @@ import java.awt.event.KeyEvent;
 
 class WorkingPanel extends JPanel{
 	/**
-	 * In this class do we draw the crossword. The metrics still
-	 * hardcoded, I want first to have the editing works. Parts of the
+	 * In this class do we draw the crossword. Parts of the
 	 * class are from zetcode.com (or .org, I always forget it...) in
-	 * hope they don't mind.
+	 * hope they don't mind. Planning to set up the metrics from the
+	 * main window.
 	 * **/
 	
 	//This is the instance we try to draw.
@@ -24,8 +24,12 @@ class WorkingPanel extends JPanel{
 	//riable. The default value is 20 because I found it readable but
 	//not too big.
 	private int metric = 20;
+	//Variable for the fonts size. It is important toresize the fonts
+	//with the whole panel.
 	private int fontsize;
+	//A pointer  where we are in the puzzle.
 	private Point activeSquare = new Point(0,0);
+	//Setting the thin and the bold lines.
 	private BasicStroke thick;
 	private BasicStroke thin;
 	
@@ -86,14 +90,21 @@ class WorkingPanel extends JPanel{
 	}
 	
 	public void paintComponent(Graphics g){
+		/**
+		 * This is the overridden method of the original JPanel class.
+		 * Here we don't do any drawing, but the private class doDrawing
+		 * is called from here.
+		 * */
 		super.paintComponent(g);
 		doDrawing(g);
 	}
 	
 	private void drawSquare(Graphics2D g, Point position){
 		/**
-		 * Here is drawn the borders of the square. The only information
-		 * we need to this is where to draw and if there is bold line.
+		 * Here is drawn the borders of the square. Exactly the right
+		 * and bottom edges, before they are the neighbour squares top
+		 * and left edges too. The bold lines are drawn here too, just
+		 * because they are also edges.
 		 */
 		if(cw.getSideLine(position)[Square.RIGHT]){
 			g.setStroke(thick);
@@ -116,7 +127,9 @@ class WorkingPanel extends JPanel{
 	private void drawLetter(Graphics2D g, Point position, String letter){
 		/**
 		 * Here are the letters drawn. Needed the letter and where to
-		 * draw.
+		 * draw. The period have the meaning of the black squares, beca-
+		 * use I plan to have a LaTeX export, and the xwpuzzle macro u-
+		 * ses the samemeaning.
 		 */
 		 
 		if( (position.x == activeSquare.x) && (position.y == activeSquare.y) ){
@@ -139,10 +152,11 @@ class WorkingPanel extends JPanel{
 		
 	}
 	
-	public void setDrawing(CrossWord given, Point ap){
-		cw = given;
+	public void setDrawing(Point ap){
+		/**
+		 * Here we get the momentary place of the cursor.
+		 * */
 		activeSquare.setLocation(ap);
-		this.repaint();
 	}
 
 }
