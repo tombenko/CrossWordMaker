@@ -11,8 +11,6 @@ class Square{
 	 * formation, therefore they are stored in a boolean array.
 	 * **/
 	
-	//Fields
-	
 	public static final short RIGHT = 0;	//These two values are for
 	public static final short BOTTOM = 1;	//seting the bold sidelines.
 	
@@ -20,10 +18,8 @@ class Square{
 	private int number;
 	private boolean[] sideLine = {false, false};
 	
-	//Constructors
-	
 	Square(){
-		/*
+		/**
 		 * The normal constructor. The letter written into is a simple
 		 * emptiness.
 		 * */
@@ -40,10 +36,8 @@ class Square{
 		
 	}
 	
-	//Methods
-	
 	public void setLetter(char letter){
-		/*
+		/**
 		 * Sets the letter written into the square. Capital letters are
 		 * more readable, so all the letters changed to this shape.
 		 * */
@@ -53,7 +47,7 @@ class Square{
 	}
 	
 	public char getLetter(){
-		/*
+		/**
 		 * Returns the letter written into.
 		 * */
 		
@@ -62,7 +56,7 @@ class Square{
 	}
 	
 	public void setNumber(int number){
-		/*
+		/**
 		 * Sets the number of the square.
 		 * */
 		
@@ -71,7 +65,7 @@ class Square{
 	}
 	
 	public int getNumber(){
-		/*
+		/**
 		 * Returns the sqares number.
 		 * */
 		
@@ -81,7 +75,7 @@ class Square{
 	
 	public void toggleSideLine(short which){
 		
-		/*
+		/**
 		 * The which parameter is described above. For sure we take the
 		 * modulo 2 remains of the given parameter for not slipping out
 		 * of the array bounds.
@@ -95,8 +89,8 @@ class Square{
 	
 	public boolean[] getSideLine(){
 		
-		/*
-		 * Returns the border lines.
+		/**
+		 * Returns the border lines existence.
 		 * */
 		
 		return sideLine;
