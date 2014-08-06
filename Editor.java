@@ -1,6 +1,9 @@
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
-import javax.swing.JComponent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
 import java.awt.Point;
 import java.awt.Dimension;
 
@@ -20,6 +23,8 @@ class Editor implements KeyListener{
 	private Point activeSquare = new Point(0, 0);
 	//The cursors moving direction. Normally L-R oriented.
 	private Point writeDirection = new Point(1,0);
+	//If you want numbner one another, this counter helps you.
+	int number = 1;
 	
 	public Editor(WorkingPanel drawer, CrossWord workInstance){
 		this.drawer = drawer;
@@ -78,7 +83,21 @@ class Editor implements KeyListener{
 			//Deleting the edited square
 			case KeyEvent.VK_DELETE: case KeyEvent.VK_BACK_SPACE:{
 				workInstance.setLetter(' ', activeSquare);
+				workInstance.setNumber(0, activeSquare);
 				moveCursor();
+				break;
+			}
+			case KeyEvent.VK_NUMPAD0: case KeyEvent.VK_NUMPAD1:
+			case KeyEvent.VK_NUMPAD2: case KeyEvent.VK_NUMPAD3:
+			case KeyEvent.VK_NUMPAD4: case KeyEvent.VK_NUMPAD5:
+			case KeyEvent.VK_NUMPAD6: case KeyEvent.VK_NUMPAD7:
+			case KeyEvent.VK_NUMPAD8: case KeyEvent.VK_NUMPAD9:
+			case KeyEvent.VK_1: case KeyEvent.VK_2:
+			case KeyEvent.VK_3: case KeyEvent.VK_4:
+			case KeyEvent.VK_5: case KeyEvent.VK_6:
+			case KeyEvent.VK_7: case KeyEvent.VK_8:
+			case KeyEvent.VK_9: case KeyEvent.VK_0:{
+				workInstance.setNumber(Integer.parseInt(String.valueOf(workInstance.getNumber(activeSquare)).concat(String.valueOf(e.getKeyChar()))), activeSquare);
 				break;
 			}
 			//The default behaviour is to write in a letter. For safe-
