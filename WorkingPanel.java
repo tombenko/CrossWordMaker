@@ -21,10 +21,10 @@ class WorkingPanel extends JPanel{
 	//This is the instance we try to draw.
 	private CrossWord cw;
 	//How big is a square. The font metrics is defined through this va-
-	//riable. The default value is 20 because I found it readable but
+	//riable. The default value is 30 because I found it readable but
 	//not too big.
-	private int metric = 20;
-	//Variable for the fonts size. It is important toresize the fonts
+	private int metric = 30;
+	//Variable for the fonts size. It is important to resize the fonts
 	//with the whole panel.
 	private int fontsize;
 	//A pointer  where we are in the puzzle.
@@ -32,6 +32,9 @@ class WorkingPanel extends JPanel{
 	//Setting the thin and the bold lines.
 	private BasicStroke thick;
 	private BasicStroke thin;
+	//The fonts for the squares drawing
+	Font letterFont;
+	Font numberFont;
 	
 	public WorkingPanel(CrossWord given){
 		cw = given;
@@ -49,6 +52,8 @@ class WorkingPanel extends JPanel{
 		thick = new BasicStroke(metric / 10 + 1);
 		thin = new BasicStroke(metric / 40 + 1);
 		fontsize = (metric * 4) / 5;
+		letterFont = new Font("Monospaced", Font.PLAIN, fontsize);
+		numberFont = new Font("Monospaced", Font.PLAIN, fontsize / 3);
 	}
 	
 	private void doDrawing(Graphics g){
@@ -66,7 +71,6 @@ class WorkingPanel extends JPanel{
 		
 		painter.setColor(Color.LIGHT_GRAY);
 		painter.setRenderingHints(rh);
-		painter.setFont(new Font("Monospaced", Font.PLAIN, fontsize)); //it must be 'int'...
 		
 		//Let's paint the puzzle. This is done by some private methods
 		//for every square. Maybe it would be better to take into a very
@@ -132,6 +136,8 @@ class WorkingPanel extends JPanel{
 		 * ses the samemeaning.
 		 */
 		 
+		 g.setFont(letterFont);
+		 
 		if( (position.x == activeSquare.x) && (position.y == activeSquare.y) ){
 			g.setColor(Color.RED);
 		} else {
@@ -149,6 +155,13 @@ class WorkingPanel extends JPanel{
 		 * Drawn are the numbers. Drawn to their faces. And it is a
 		 * human number and it is six hundred and sixty six.
 		 */
+		 
+		 g.setFont(numberFont);
+		 g.setColor(Color.BLACK);
+		 
+		 if(number != 0){
+			 g.drawString(String.valueOf(number), position.x * metric + metric / 20, position.y * metric + fontsize / 3 + metric / 20);
+		 }
 		
 	}
 	
