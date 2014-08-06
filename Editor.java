@@ -84,9 +84,9 @@ class Editor implements KeyListener{
 			case KeyEvent.VK_DELETE: case KeyEvent.VK_BACK_SPACE:{
 				workInstance.setLetter(' ', activeSquare);
 				workInstance.setNumber(0, activeSquare);
-				moveCursor();
 				break;
 			}
+			//Setting the number the simplest way
 			case KeyEvent.VK_NUMPAD0: case KeyEvent.VK_NUMPAD1:
 			case KeyEvent.VK_NUMPAD2: case KeyEvent.VK_NUMPAD3:
 			case KeyEvent.VK_NUMPAD4: case KeyEvent.VK_NUMPAD5:
