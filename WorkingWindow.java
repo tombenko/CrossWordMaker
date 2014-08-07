@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Dimension;
+import java.awt.BorderLayout;
 
 class WorkingWindow extends JFrame{
 	/**
@@ -38,7 +39,9 @@ class WorkingWindow extends JFrame{
 	private void initUI(String title){
 		setTitle(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		add(workArea);
+		setLayout(new BorderLayout());
+		add(new MyMenuBar(workInstance, workArea), BorderLayout.PAGE_START);
+		add(workArea, BorderLayout.CENTER);
 		addKeyListener(editke);
 		pack();
 		setResizable(false);
