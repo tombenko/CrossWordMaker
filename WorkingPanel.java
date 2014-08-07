@@ -123,26 +123,26 @@ class WorkingPanel extends JPanel{
 			g.setColor(Color.BLACK);
 		} else {
 			g.setStroke(thin);
-			g.setColor(Color.LIGHT_GRAY);
+			g.setColor(Color.GRAY);
 		}
 		g.drawLine(position.x * metric, (position.y + 1) * metric, (position.x + 1) * metric, (position.y + 1) * metric);
+		if( (activeSquare.x == position.x) && (activeSquare.y == position.y) ){
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(position.x * metric, position.y * metric, metric, metric);
+		}
 	}
 	
 	private void drawLetter(Graphics2D g, Point position, String letter){
 		/**
 		 * Here are the letters drawn. Needed the letter and where to
 		 * draw. The period have the meaning of the black squares, beca-
-		 * use I plan to have a LaTeX export, and the xwpuzzle macro u-
-		 * ses the samemeaning.
+		 * use I plan to have a LaTeX export, and the cwpuzzle macro u-
+		 * ses the same meaning.
 		 */
 		 
-		 g.setFont(letterFont);
+		g.setFont(letterFont);
 		 
-		if( (position.x == activeSquare.x) && (position.y == activeSquare.y) ){
-			g.setColor(Color.RED);
-		} else {
-			g.setColor(Color.BLACK);
-		}
+		g.setColor(Color.BLACK);
 		if( letter.equals(".") ){
 			g.fillRect(position.x * metric, position.y * metric, metric, metric);
 		}
