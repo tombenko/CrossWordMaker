@@ -12,7 +12,7 @@ public class CrossWordMaker{
 		SwingUtilities.invokeLater(
 			new Runnable(){
 				public void run(){
-					new WorkingWindow("CrossWordMaker", new Dimension(21,13)).setVisible(true);
+					new WorkingWindow("CrossWordMaker", new Dimension(17,15)).setVisible(true);
 				}
 			}
 		);
