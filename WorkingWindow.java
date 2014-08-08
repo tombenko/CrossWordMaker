@@ -40,11 +40,30 @@ class WorkingWindow extends JFrame{
 		setTitle(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		add(new MyMenuBar(workInstance, workArea), BorderLayout.PAGE_START);
+		add(new MyMenuBar(workInstance, workArea, this), BorderLayout.PAGE_START);
 		add(workArea, BorderLayout.CENTER);
 		addKeyListener(editke);
 		pack();
 		setResizable(false);
+	}
+	
+	public void resize(int newMetric){
+		/**
+		 * 
+		 * This method is used through a reference to resize the displa-
+		 * yed puzzle and the window with it.
+		 * */
+		remove(workArea);
+		workArea.resize(newMetric);
+		add(workArea);
+		pack();
+	}
+	
+	public void newPuzzle(int row, int column){
+		workInstance = new CrossWord(new Dimension(row, column));
+		workArea = new WorkingPanel(workInstance);
+		editke = new Editor(workArea, workInstance);
+		initUI(this.getTitle());
 	}
 
 }
