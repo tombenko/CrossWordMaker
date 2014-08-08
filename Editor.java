@@ -81,7 +81,19 @@ class Editor implements KeyListener{
 				break;
 			}
 			//Deleting the edited square
-			case KeyEvent.VK_DELETE: case KeyEvent.VK_BACK_SPACE:{
+			case KeyEvent.VK_DELETE:{
+				workInstance.setLetter(' ', activeSquare);
+				workInstance.setNumber(0, activeSquare);
+				moveCursor();
+				break;
+			}
+			case KeyEvent.VK_BACK_SPACE:{
+				if(activeSquare.x > 0){
+					activeSquare.x -= writeDirection.x;
+				}
+				if(activeSquare.y > 0){
+					activeSquare.y -= writeDirection.y;
+				}
 				workInstance.setLetter(' ', activeSquare);
 				workInstance.setNumber(0, activeSquare);
 				break;
