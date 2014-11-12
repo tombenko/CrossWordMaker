@@ -1,0 +1,121 @@
+\documentclass[10pt,twoside]{book}
+
+\usepackage[paperwidth=148mm,paperheight=210mm,
+top=12mm,bottom=12mm,inner=18mm,outer=10mm,
+headheight=22pt,headsep=2pt,
+dvips]{geometry}
+
+\usepackage{cwpuzzle}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[magyar]{babel}
+
+\author{Benkó Tamás}
+\title{A CrossWordMaker program leírása}
+
+\begin{document}
+
+\maketitle
+\frontmatter
+\tableofcontents
+
+\mainmatter
+
+\chapter{A program kezelése}
+
+A program kezelése alapvetően a billentyűzetről történik. Ennek a legjelentősebb oka, hogy a keresztrejtvények túlnyomórészt betűket és számokat tartalmaznak, amiket eleve billentyűzetről viszünk be. Logikus volt tehát úgy elkészíteni a programot, hogy a funkciók szintén elérhetőek legyenek a billentyűzetet használva, így a munka során nem pocsékoljuk a drága időnket az egér és az egérkuzor keresésére és navigálására.
+
+Ellenben a menüket egérrel lehet használni, hiszen ha valamilyen menüparancsot akarunk kiadni, akkor feltehetőleg az aktuális munkát legalábbis félbe tervezzük szakítani, tehát nem lényeges esemény az egér mozgatása.
+
+\section{A képernyő és részei}
+
+Maga a képernyő (a nem feltétlenül létező kereteket leszámítva) két részből áll. Felül egy rövid menüsor található, alatta pedig maga a kitöltésre váró rejtvényábra.
+
+A menüsor három menüpontot tartalmaz, ezek sorrendben:
+\begin{itemize}
+\item File
+\item Beállítások
+\item Információk.
+\end{itemize}
+Az itt található menüpontokról később még lesz szó.
+
+A rejtvényábrában halványszürke négyzet viselkedik kurzorként, ez mutatja, hogy a következőnek beírt betű illetve szám hová kerül.
+
+Az ablakot átméretezni nem lehet, csak a megjelenített ábra méretének megváltoztatásával.
+
+\section{Szerkesztés}
+
+A szerkesztés a billentyűzet segítségével történik. Alapvetően amikor egy billentyűt lenyomunk, akkor a hozzá tartozó betű (ha van ilyen) az éppen kijelölt négyzetbe kerül, majd a kurzor a következő mezőre ugrik.
+
+Számbillentyűk lenyomásakor a számjegy a négyzetben található szám végéhez hozzáfűződik. A program nem ellenőrzi a számok hosszúságát, normális esetben ugyanis három jegynél hosszabb szám nem kerülhet a négyzetbe. (Persze mindig van nem normális eset is, de az így járt.)
+
+A kurzor mozgási iránya alpértelmezésben balról jobbfelé mutat, de ezt a szóköz (space) billentyűvel átválthatjuk fentről lefelé irányra. Visszafelé ugyanígy kell cselekedni.
+
+A törlés (delete) billentyű hatására az aktuális négyzet teljes tartalma törlődik, beleértve a számokat is. Ezután a kurzor a következő négyzetre lép. A visszalépés (backspace) billentyűnél is ez történik, csak a lépés ellentétes irányba történik.
+
+A rejtvényekben található egyéb jelöléseket szintén a billentyűzetről lehet bevinni. A pont lenyomása fekete négyzetet jelent, ezt a program betűként értelmezi, tehát törölni a törlőgombokkal lehet. A vastag vonalakat a pont mellett található két gombbal lehet ki és bekapcsolni. A mínuszjel a függőleges, a vessző a vízszintes vonalakat határozza meg.
+
+A kurzor független mozgatására a kurzornyilak szolgálnak, itt értelemszerűen történik a mozgás.
+
+\section{A menük}
+
+\subsection{File menü}
+
+Ebben a menüben a különféle ki és bemeneti műveleteket végezhetjük el. A menüpontok a következők:
+
+\subsubsection{Új} Új keresztrejtvény szerkesztéséhez láthatunk hozzá. Első lépésként megjelenik egy ablak, ahol beállíthatjuk a rejtvény dimenzióit.
+
+\subsubsection{Mentés} A meglévő rejtvényt fájlba írhatjuk.
+
+\subsubsection{Visszaállítás} Egy korábban elmentett rejtvény szerkesztését folytathatjuk.
+
+\subsubsection{Exportálás LaTeX-be} A rejtvényt a nagytudású nyomdai szedőprogram, a \LaTeX{} \emph{cwpuzzle} makrócsomagjának formátumában lehet elmenteni. Ennek előnye, hogy a rejtvényábra nyomdakész állapotba kerül, illetve meghatározásokat és egyéb finomságokat lehet hozzáadni.
+
+\subsubsection{Nyomtatás} Az ábra kinyomtatását végezhetjük el.
+
+\subsubsection{Kilépés} A program használatát fejezhetjük ezzel a menüponttal be.
+
+\subsection{Beállítások menü}
+
+\subsection{Információk menü}
+
+\chapter{A keresztrejtvényekről}
+
+\section{Történelem}
+
+\section{Alaptípusok}
+
+\subsection{Hagyományos}
+
+\subsection{Vonalas}
+
+\subsection{Olasz}
+
+\subsection{Skandináv}
+
+\subsection{Kocka és vonalvadászat}
+
+\subsection{Kevert}
+
+\subsection{Újraszerkesztés}
+
+\subsection{Keretjáték}
+
+\section{Speciális rejtvénytípusok}
+
+\subsection{Plusz egy vicc}
+
+\subsection{Karácsonyfa}
+
+\subsection{Ugrás a sötétbe}
+
+\chapter{Ajánlások}
+
+\chapter{A program belső felépítése}
+
+\backmatter
+
+\chapter{Függelék: A GNU Public Licensz}
+
+\end{document}
