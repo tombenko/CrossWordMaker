@@ -1,9 +1,7 @@
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-class MenuBar extends javax.swing.JMenuBar{
+abstract class MenuBar extends javax.swing.JMenuBar implements java.awt.event.ActionListener{
 	/**
 	 * The menubars class. It will be added in the main program to the
 	 * main window to allow opening a new crossword and some file
@@ -32,13 +30,7 @@ class MenuBar extends javax.swing.JMenuBar{
 	JMenuItem help = new JMenuItem("Súgó");
 	JMenuItem version = new JMenuItem("Verzió");
 	
-	//And last: the reference for the crossword, because I didn't find
-	//out, how to return a value from a void method...
-	CrossWord temporaryCrossWord;
-	
-	public MenuBar(CrossWord cw){
-		
-		this.temporaryCrossWord = cw;
+	public MenuBar(){
 		
 		//Headmenus
 		add(file);
@@ -64,69 +56,21 @@ class MenuBar extends javax.swing.JMenuBar{
 		helpMenu.add(version);
 		
 		//File submenus.
-		getnew.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		open.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		save.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		saveas.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		print.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		export.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		exit.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
+		getnew.addActionListener(this);
+		open.addActionListener(this);
+		save.addActionListener(this);
+		saveas.addActionListener(this);
+		print.addActionListener(this);
+		export.addActionListener(this);
+		exit.addActionListener(this);
 		
 		//Setup submenus
-		resize.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		fonts.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		colors.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
+		resize.addActionListener(this);
+		fonts.addActionListener(this);
+		colors.addActionListener(this);
 		
 		//Help submenus
-		help.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
-		version.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					
-					}
-				});
+		help.addActionListener(this);
+		version.addActionListener(this);
 	}
 }

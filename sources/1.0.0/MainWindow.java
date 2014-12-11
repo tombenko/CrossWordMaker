@@ -7,39 +7,24 @@ import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 
 class MainWindow extends javax.swing.JFrame{
-	private Display display;
-	private Editor editor;
-	private CrossWord crossword;
 	private JPanel workArea = new JPanel();
 	
-	public MainWindow(Editor e, Display d, CrossWord cw){
-		this.display = d;
-		this.editor = e;
-		this.crossword = cw;
+	public MainWindow(){
 		initUI();
 	}
 	
 	private void initUI(){
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		addKeyListener(editor);
 		add(workArea, BorderLayout.CENTER);
-		setJMenuBar(menuMaker());
-		workArea.add(display);
 		setResizable(false);
-		pack();
 	}
 	
-	private JMenuBar menuMaker(){
-		JMenuBar menu = new JMenuBar();
-		
-		JMenu file = new JMenu("Fájl");
-		JMenu setup = new JMenu("Beállítások");
-		JMenu help = new JMenu("Súgó");
-		menu.add(file);
-		menu.add(setup);
-		menu.add(help);
-		
-		return menu;
+	public void addDisplay(Display d){
+		workArea.add(d);
+	}
+	
+	public void removeDisplay(Display d){
+		workArea.remove(d);
 	}
 }

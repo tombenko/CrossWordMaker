@@ -27,7 +27,16 @@ public class MainProgram{
 	private void initUI(){
 		theDisplay = new Display(theCrossWord, theCursor);
 		theEditor = new Editor(theCrossWord, theCursor,theDisplay);
-		theMainWindow = new MainWindow(theEditor, theDisplay, theCrossWord);
+		theMainWindow = new MainWindow();
+		theMainWindow.setJMenuBar(new MenuBar(){
+				public void actionPerformed(java.awt.event.ActionEvent e){
+					if(e.getSource().equals(getnew)){
+						
+					}
+				}
+			});
+		theMainWindow.addKeyListener(theEditor);
+		theMainWindow.addDisplay(theDisplay);
 		theMainWindow.setVisible(true);
 	}
 }
